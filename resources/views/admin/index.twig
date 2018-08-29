@@ -1,0 +1,102 @@
+{% extends('layout.admin') %}
+
+{% block content %}
+    <div class="container-fluid">
+        <p class="display-4">Просмотр вопросов</p>
+        <div class="row">
+            <div class="col-md-12">
+                <form action="" method="get" accept-charset="utf-8">
+
+                    <div class="form-group">
+                        <label for="category">Выберите категорию</label>
+                        <select name="category" id="category" class="form-control">
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if category.id == selectedCategory %} selected {% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Показать</button>
+                    </div>
+
+                    <table class="table table-hover table-bordered table-condensed">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>№</th>
+                            <th>Вопрос</th>
+                            <th>Ответ</th>
+                            <th>Автор</th>
+                            <th>Дата создания вопроса</th>
+                            <th>Опубликован</th>
+                            <th>Ждет ответа</th>
+                            <th>Ответить</th>
+                            <th>Редактирование</th>
+                            <th>Перенос вопроса в другую категорию</th>
+                            <th>Удаление</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in result %}
+                            <tr>
+                                <td>
+                                    {{ item.id }}
+                                </td>
+                                <td>
+                                    {{ item.question }}
+                                </td>
+                                <td>
+                                    {{ item.answer.answer }}
+                                </td>
+                                <td>
+                                    {{ item.author }}
+                                </td>
+                                <td width="180">
+                                    {{ item.created_at }}
+                                </td>
+                                <td class="text-center">
+                                    {% if item.answer.answer is not empty %}
+                                        {% if item.published == 1 %}
+                                            Да (<a href="{{ route('status') ~ '/' ~ item.id ~ '/0' }}">Скрыть</a>)
+                                        {% else %}
+                                            Нет (<a
+                                                href="{{ route('status') ~ '/' ~ item.id ~ '/1' }}">Опубликовать</a>)
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if item.answer.answer is null or item.answer.answer|trim is empty %}
+                                        Да
+                                    {% else %}
+                                        Нет
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    {% if item.answer.answer is null or item.answer.answer|trim is empty %}
+                                        <a href="{{ route('answer') ~ '/' ~ item.id }}">Ответить</a>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ route('edit') ~ '/' ~ item.id }}">Редактировать</a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('changeTheme') ~ '/' ~ item.id }}">Перенести</a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('deleteQuestion') ~ '/' ~ item.id }}">Удалить</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block init_scripts %}
+{% endblock init_scripts %}
