@@ -1,6 +1,7 @@
 ## Инструкции по установке и первому запуску
 
-1. Установить git в нужную директорию, затем клонировать репозиторий (git clone https://github.com/MaxIvashchenko/Diplom-PHP.git)
+1. Установить git в нужную директорию, затем клонировать репозиторий 
+   (git clone https://github.com/MaxIvashchenko/Diplom-PHP.git)
 2. Установить composer (composer install)
 3. Создать файл .env и скопировать данные с файл .env.exmaple и заполнить логин, пароль и имя базы данных.
 4. Сформировать ключ (php artisan key:generate)
