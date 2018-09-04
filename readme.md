@@ -1,4 +1,7 @@
 ## Инструкции по установке и первому запуску
+http://mydiplom.info/ - основная страница
+http://mydiplom.info/admin - страница админа
+
 
 1. Установить git в нужную директорию, затем клонировать репозиторий 
    (git clone https://github.com/MaxIvashchenko/Diplom-PHP.git)
