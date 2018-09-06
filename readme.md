@@ -20,3 +20,5 @@ http://mydiplom.info/admin - страница админа
 
 ## Схема таблиц БД
 https://drive.google.com/open?id=18G5R6S9VIZXVUSy_NIzFV2J1Q2Oj7zAh
+
+https://drive.google.com/open?id=1ZqgwelVNUK9pKkE08roJF0GrlUsdwupA
