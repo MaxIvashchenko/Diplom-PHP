@@ -8,35 +8,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 class ThemeController extends Controller
 {
-    /** Список тем
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+    /** Список тем    */
     public function getIndex()
     {
         $result = DB::select(
             DB::raw(
-                "SELECT c.*,  
-                            (SELECT COUNT(*) FROM questions WHERE questions.category_id = c.id) QNum, 
-                            (SELECT COUNT(*) FROM questions WHERE questions.category_id = c.id AND questions.published = 1 ) QPubNum, 
-                            (SELECT COUNT(*) FROM answers 
-                            INNER JOIN questions ON answers.question_id = questions.id
-                            WHERE questions.category_id = c.id
-                            GROUP BY questions.category_id
-                            ORDER BY category_id) ANum
-                          FROM categories c"));
+                "SELECT COUNT(*) as QNum, 
+                SUM(IF(questions.category_id = c.id AND questions.published = 1, 1, 0)) 
+                as QPubNum FROM questions WHERE questions.category_id = c.id"));
         return view('/admin/theme/index', compact('result'));
     }
-    /** Страница добавления новых тем
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+    /** Страница добавления новых тем     */
     public function getAdd()
     {
         return view('admin/theme/add');
     }
-    /** Сохранение новой темы
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
+    /** Сохранение новой темы */
     public function postAdd(Request $request)
     {
         $name = $request->input('inputName');
@@ -56,9 +43,7 @@ class ThemeController extends Controller
         return view('admin/theme/delete', compact('category'));
     }
     /** Удаление темы
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
+     * @param int $id     */
     public function postDelete($id = 0)
     {
         $category = Category::find((int)$id);
@@ -68,10 +53,7 @@ class ThemeController extends Controller
         Log::info(Auth::user()->name.' удалил тему '.$category->name);
         return redirect('/admin/theme/index');
     }
-    /** Страница смены темы
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+    /** Страница смены темы      */
     public function getChange($id = 0)
     {
         $categories = $questions = $result = [];
@@ -81,11 +63,7 @@ class ThemeController extends Controller
             ->get()->toArray()[0];
         return view('admin/theme/change', compact('categories', 'question'));
     }
-    /** Сохранение смены темы
-     * @param int $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
+    /** Сохранение смены темы      */
     public function postChange($id = 0, Request $request)
     {
         $category_id = $request->input('inputCategory');
