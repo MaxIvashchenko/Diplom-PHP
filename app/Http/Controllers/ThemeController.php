@@ -12,11 +12,19 @@ class ThemeController extends Controller
     public function getIndex()
     {
         $result = DB::select(
-            DB::raw(
-                "SELECT COUNT(*) as QNum, 
-                SUM(IF(questions.category_id = c.id AND questions.published = 1, 1, 0)) 
-                as QPubNum FROM questions WHERE questions.category_id = c.id"));
-        return view('/admin/theme/index', compact('result'));
+                    DB::raw(
+                        "SELECT c.*,  
+                            (SELECT COUNT(*) FROM questions WHERE questions.category_id = c.id) QNum, 
+                            (SELECT COUNT(*) FROM questions WHERE questions.category_id = c.id AND questions.published = 1 ) QPubNum, 
+                            (SELECT COUNT(*) FROM answers 
+                            INNER JOIN questions ON answers.question_id = questions.id
+                            WHERE questions.category_id = c.id
+                            GROUP BY questions.category_id
+                            ORDER BY category_id) ANum
+                          FROM categories c"));
+
+            return view('/admin/theme/index', compact('result'));
+
     }
     /** Страница добавления новых тем     */
     public function getAdd()
